@@ -226,7 +226,22 @@ export default function SmartvoteElection() {
     setActiveCard(null); // close modal if open when switching role
   };
 
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3004";
+  const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:3004").replace(/\/$/, "");
+
+  const normalizeImageUrl = (image) => {
+    if (!image) return "";
+    // If image was stored with localhost base, rewrite to backend base URL
+    if (image.startsWith("http://localhost:3004") || image.startsWith("https://localhost:3004")) {
+      const path = image.replace(/^https?:\/\/localhost:3004/, "");
+      return `${BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+    }
+    // If it's already an absolute non-localhost URL, use as is
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return image;
+    }
+    // Otherwise treat as relative path from backend
+    return `${BASE_URL}${image.startsWith("/") ? image : `/${image}`}`;
+  };
 
   const cards = roleData[role] || [];
   const currentRoleLabel =
@@ -819,7 +834,7 @@ export default function SmartvoteElection() {
                           <figure className="px-4 pt-4">
                             {card.image && card.image.trim() !== '' ? (
                               <img
-                                src={card.image.startsWith('http://') || card.image.startsWith('https://') ? card.image : `${BASE_URL}${card.image.startsWith('/') ? card.image : '/' + card.image}`}
+                                src={normalizeImageUrl(card.image)}
                                 alt={`${card.firstname} ${card.lastname}`}
                                 className="w-full h-48 object-cover rounded-lg"
                                 onError={(e) => {
@@ -895,7 +910,7 @@ export default function SmartvoteElection() {
                       <div className="mb-4 flex justify-center">
                         {activeCard.image ? (
                           <img
-                            src={activeCard.image.startsWith('http') ? activeCard.image : `${BASE_URL}${activeCard.image}`}
+                            src={normalizeImageUrl(activeCard.image)}
                             alt={`${activeCard.firstname} ${activeCard.lastname}`}
                             className="w-48 h-48 object-cover rounded-lg"
                             onError={(e) => {

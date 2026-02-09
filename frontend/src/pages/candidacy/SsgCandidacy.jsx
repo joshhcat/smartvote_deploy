@@ -417,6 +417,20 @@ export const SsgCandidacy = () => {
     }
   }, [status]); // Trigger when status or remarks change
 
+  const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:3004").replace(/\/$/, "");
+
+  const normalizeImageUrl = (image) => {
+    if (!image) return "";
+    if (image.startsWith("http://localhost:3004") || image.startsWith("https://localhost:3004")) {
+      const path = image.replace(/^https?:\/\/localhost:3004/, "");
+      return `${BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+    }
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return image;
+    }
+    return `${BASE_URL}${image.startsWith("/") ? image : `/${image}`}`;
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-base-200 overflow-auto">
       {isLoading && (
@@ -672,7 +686,7 @@ export const SsgCandidacy = () => {
                             {selectedCandidate.image && (
                             <div className="mb-4 flex justify-center">
                               <img
-                                src={selectedCandidate.image.startsWith('http') ? selectedCandidate.image : `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3004"}${selectedCandidate.image}`}
+                                src={normalizeImageUrl(selectedCandidate.image)}
                                 alt={`${selectedCandidate.firstname} ${selectedCandidate.lastname}`}
                                 className="w-48 h-48 object-cover rounded-lg border-2 border-emerald-300 dark:border-emerald-600"
                                 onError={(e) => {
