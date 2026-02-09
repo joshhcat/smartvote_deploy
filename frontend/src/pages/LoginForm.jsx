@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import testImage from "../assets/unsplash.jpg";
 import slogo from "../assets/slogo.png";
 import Loader from "../components/Loader";
-import axios from "axios";
+import api from "../api";
 import { FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
 
@@ -72,14 +72,11 @@ export default function LoginForm() {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-admin-password",
-        {
-          admin_id: adminDataForUpdate[0].admin_id,
-          old_password: passwordData.old_password,
-          new_password: passwordData.new_password,
-        }
-      );
+      const response = await api.post("/smart-vote/update-admin-password", {
+        admin_id: adminDataForUpdate[0].admin_id,
+        old_password: passwordData.old_password,
+        new_password: passwordData.new_password,
+      });
 
       if (response.data.success === true) {
         setIsLoading(false);
@@ -116,13 +113,10 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/admin-login",
-        {
-          admin_id: loginData.student_id,
-          password: loginData.password,
-        }
-      );
+      const response = await api.post("/smart-vote/admin-login", {
+        admin_id: loginData.student_id,
+        password: loginData.password,
+      });
       if (response.data.success === true) {
         const adminData = response.data.data;
         
@@ -177,10 +171,7 @@ export default function LoginForm() {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/voters-login",
-        loginData
-      );
+      const response = await api.post("/smart-vote/voters-login", loginData);
       if (response.data.success === true) {
         setTimeout(() => {
           setIsLoading(false);
