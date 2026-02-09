@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { FaCalendarAlt, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
 import Loader from "../components/Loader";
@@ -59,8 +59,8 @@ export default function ElectionSchedule() {
       for (const election of filteredElectionTypes) {
         // Fetch election schedule
         try {
-          const response = await axios.post(
-            `http://localhost:3004/smart-vote/get-election-schedule/${election.id}`
+          const response = await api.post(
+            `/smart-vote/get-election-schedule/${election.id}`
           );
           if (response.data.success) {
             electionData[election.id] = response.data.data[0];
@@ -71,8 +71,8 @@ export default function ElectionSchedule() {
 
         // Fetch candidacy schedule
         try {
-          const candidacyResponse = await axios.post(
-            `http://localhost:3004/smart-vote/get-candidacy-schedule/${election.candidacyType}`
+          const candidacyResponse = await api.post(
+            `/smart-vote/get-candidacy-schedule/${election.candidacyType}`
           );
           if (candidacyResponse.data.success) {
             candidacyData[election.id] = candidacyResponse.data.data[0];
@@ -175,8 +175,8 @@ export default function ElectionSchedule() {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-election",
+      const response = await api.post(
+        "/smart-vote/update-election",
         formattedData
       );
 
@@ -215,7 +215,7 @@ export default function ElectionSchedule() {
   const handleCloseElection = async (electionType) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:3004/smart-vote/update-election", {
+      const response = await api.post("/smart-vote/update-election", {
         election_type: electionType,
         close_date: formatDateForMySQL(new Date()),
         status: "CLOSED",

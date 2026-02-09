@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import Navbar from "../components/Navbar";
 
 export default function StudentDashboard() {
@@ -93,8 +93,8 @@ export default function StudentDashboard() {
 
       // Fetch election status
       try {
-        const statusResponse = await axios.post(
-          `http://localhost:3004/smart-vote/get-election-schedule/${electionType}`
+        const statusResponse = await api.post(
+          `/smart-vote/get-election-schedule/${electionType}`
         );
         if (statusResponse.data.success) {
           setElectionStatus(statusResponse.data.data[0] || null);
@@ -106,8 +106,8 @@ export default function StudentDashboard() {
 
       // Fetch election results
       try {
-        const resultsResponse = await axios.post(
-          `http://localhost:3004/smart-vote/get-election-results/${electionType}`
+        const resultsResponse = await api.post(
+          `/smart-vote/get-election-results/${electionType}`
         );
         if (resultsResponse.data.success) {
           setResults(resultsResponse.data.data);
@@ -119,8 +119,8 @@ export default function StudentDashboard() {
 
       // Fetch election statistics
       try {
-        const statsResponse = await axios.post(
-          `http://localhost:3004/smart-vote/get-election-statistics/${electionType}`
+        const statsResponse = await api.post(
+          `/smart-vote/get-election-statistics/${electionType}`
         );
         if (statsResponse.data.success) {
           setStatistics(statsResponse.data.data);

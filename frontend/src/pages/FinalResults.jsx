@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { FaTrophy, FaCrown, FaTimesCircle, FaPrint, FaFilePdf } from "react-icons/fa";
 import jsPDF from "jspdf";
 import Loader from "../components/Loader";
@@ -97,8 +97,8 @@ export default function FinalResults() {
     
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-results/${selectedElection}`
+      const response = await api.post(
+        `/smart-vote/get-election-results/${selectedElection}`
       );
 
       if (response.data.success) {
@@ -111,8 +111,8 @@ export default function FinalResults() {
 
     // Also fetch election status
     try {
-      const statusResponse = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-schedule/${selectedElection}`
+      const statusResponse = await api.post(
+        `/smart-vote/get-election-schedule/${selectedElection}`
       );
       if (statusResponse.data.success) {
         setElectionStatus(statusResponse.data.data[0]?.status || "CLOSED");

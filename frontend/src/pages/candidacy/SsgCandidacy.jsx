@@ -12,7 +12,7 @@ import {
 import CountDown from "../../components/CountDown";
 import OpenFiling from "../../components/OpenFiling";
 import { FaCircleXmark, FaMessage, FaRegCircleXmark } from "react-icons/fa6";
-import axios from "axios";
+import api from "../../api";
 import Loader from "../../components/Loader";
 import { sendMail } from "../../utils/mailer";
 
@@ -82,8 +82,8 @@ export const SsgCandidacy = () => {
   //* Get Candidates
   const getCandidate = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-candidates/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-candidates/${dept}`
       );
 
       if (response.data.success === true) {
@@ -272,8 +272,8 @@ export const SsgCandidacy = () => {
     document.getElementById("my_modal_4").close();
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-candidate",
+      const response = await api.post(
+        "/smart-vote/update-candidate",
         {
           student_id: selectedCandidate.student_id,
           status: status,
@@ -365,8 +365,8 @@ export const SsgCandidacy = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-candidacy",
+      const response = await api.post(
+        "/smart-vote/update-candidacy",
         {
           candidacy_type: dept,
           close_date: formattedDate,
@@ -669,10 +669,10 @@ export const SsgCandidacy = () => {
                       <div className="mt-2">
                         {/* <form method="dialog"> */}
                         <div className="">
-                          {selectedCandidate.image && (
+                            {selectedCandidate.image && (
                             <div className="mb-4 flex justify-center">
                               <img
-                                src={selectedCandidate.image.startsWith('http') ? selectedCandidate.image : `http://localhost:3004${selectedCandidate.image}`}
+                                src={selectedCandidate.image.startsWith('http') ? selectedCandidate.image : `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3004"}${selectedCandidate.image}`}
                                 alt={`${selectedCandidate.firstname} ${selectedCandidate.lastname}`}
                                 className="w-48 h-48 object-cover rounded-lg border-2 border-emerald-300 dark:border-emerald-600"
                                 onError={(e) => {

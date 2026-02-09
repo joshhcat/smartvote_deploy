@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api";
 import { useEffect, useState } from "react";
 
 const OpenElection = ({ dept, setElectionOpened, setShowElectionForm }) => {
@@ -23,8 +23,8 @@ const OpenElection = ({ dept, setElectionOpened, setShowElectionForm }) => {
   //*Get Election Schedule
   const getElectionSchedule = async (e) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-schedule/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-election-schedule/${dept}`
       );
       if (response.data.success === true) {
         setElectionSchedule(response.data.data[0]);
@@ -53,8 +53,8 @@ const OpenElection = ({ dept, setElectionOpened, setShowElectionForm }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-election",
+      const response = await api.post(
+        "/smart-vote/update-election",
         formData
       );
       if (response.data.success === true) {

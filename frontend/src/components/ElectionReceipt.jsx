@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "./Navbar";
 import { QRCodeSVG } from "qrcode.react";
 import { FaEye } from "react-icons/fa";
-import axios from "axios";
+import api from "../api";
 
 
 
@@ -14,8 +14,8 @@ export default function ElectionReceipt() {
 
   const getVoteHistory = async (e) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/vote-history",
+      const response = await api.post(
+        "/smart-vote/vote-history",
         {
           student_id: loggedUser?.student_id,
           voters_id: loggedUser?.voters_id,

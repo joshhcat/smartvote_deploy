@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,8 +45,8 @@ export default function AdminDashboard() {
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/get-dashboard-stats",
+      const response = await api.post(
+        "/smart-vote/get-dashboard-stats",
         {
           department: isSSGAdmin ? null : adminDepartments,
         }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import testImage from "../assets/unsplash.jpg";
-import axios from "axios";
+import api from "../api";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
 import Webcam from "react-webcam";
@@ -232,8 +232,8 @@ export default function Register() {
     // Add registration logic here
 
     try {
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/voters",
+      const response = await api.post(
+        "/smart-vote/voters",
         {...formData, facial_descriptor: facialDesc}
       );
       if (response.data.success === true) {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { FaUsers, FaVoteYea, FaChartBar } from "react-icons/fa";
 import Loader from "../components/Loader";
 
@@ -157,8 +157,8 @@ export default function ElectionResults() {
   const fetchResults = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-results/${selectedElection}`
+      const response = await api.post(
+        `/smart-vote/get-election-results/${selectedElection}`
       );
 
       if (response.data.success) {
@@ -171,8 +171,8 @@ export default function ElectionResults() {
 
     // Also fetch election status
     try {
-      const statusResponse = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-schedule/${selectedElection}`
+      const statusResponse = await api.post(
+        `/smart-vote/get-election-schedule/${selectedElection}`
       );
       if (statusResponse.data.success) {
         setElectionStatus(statusResponse.data.data[0]?.status || "CLOSED");
@@ -183,8 +183,8 @@ export default function ElectionResults() {
 
     // Fetch statistics
     try {
-      const statsResponse = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-statistics/${selectedElection}`
+      const statsResponse = await api.post(
+        `/smart-vote/get-election-statistics/${selectedElection}`
       );
       if (statsResponse.data.success) {
         setStatistics(statsResponse.data.data);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CountDown from "./CountDown";
 import Navbar from "./Navbar";
 import dropdowndata from "../utils/dropdowndata";
-import axios from "axios";
+import api from "../api";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
@@ -81,8 +81,8 @@ export default function CandidacyForm() {
 
   const getCandidacySchedule = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-candidacy-schedule/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-candidacy-schedule/${dept}`
       );
 
       if (response.data.success === true && response.data.data?.[0]) {
@@ -115,8 +115,8 @@ export default function CandidacyForm() {
   const [admins, setAdmins] = useState([]);
   const geAllAdmin = async (e) => {
     try {
-      const response = await axios.get(
-        "http://localhost:3004/smart-vote/get-admins"
+      const response = await api.get(
+        "/smart-vote/get-admins"
       );
 
       if (response.data.success === true) {
@@ -230,8 +230,8 @@ export default function CandidacyForm() {
         const formData = new FormData();
         formData.append('image', file);
 
-        const response = await axios.post(
-          'http://localhost:3004/smart-vote/upload-candidate-image',
+        const response = await api.post(
+          '/smart-vote/upload-candidate-image',
           formData,
           {
             headers: {
@@ -276,8 +276,8 @@ export default function CandidacyForm() {
       const formData = new FormData();
       formData.append('image', imageFile);
 
-      const response = await axios.post(
-        'http://localhost:3004/smart-vote/upload-candidate-image',
+      const response = await api.post(
+        '/smart-vote/upload-candidate-image',
         formData,
         {
           headers: {
@@ -435,8 +435,8 @@ export default function CandidacyForm() {
     console.log('Image URL being sent:', submissionData.image);
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/insert-candidates",
+      const response = await api.post(
+        "/smart-vote/insert-candidates",
         submissionData
       );
       if (response.data.success === true) {

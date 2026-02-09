@@ -8,7 +8,7 @@ import {
 import { FaArrowLeftLong, FaCircleXmark } from "react-icons/fa6";
 import CountDown from "../components/CountDown";
 import ElectionCountdown from "../components/ElectionCountdown";
-import axios from "axios";
+import api from "../api";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
@@ -100,8 +100,8 @@ export default function SmartvoteElection() {
 
   const getCandidates = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/approved-candidates/${dept}`
+      const response = await api.post(
+        `/smart-vote/approved-candidates/${dept}`
       );
       if (response.data.success === true) {
         setCandidates(response.data.data);
@@ -226,6 +226,8 @@ export default function SmartvoteElection() {
     setActiveCard(null); // close modal if open when switching role
   };
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3004";
+
   const cards = roleData[role] || [];
   const currentRoleLabel =
     roleDisplayName[role] ||
@@ -245,8 +247,8 @@ export default function SmartvoteElection() {
   // Fetch election schedule from backend
   const getElectionSchedule = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-election-schedule/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-election-schedule/${dept}`
       );
       if (response.data.success === true) {
         setElectionData(response.data.data[0]);
@@ -347,8 +349,8 @@ export default function SmartvoteElection() {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/insert-votes",
+      const response = await api.post(
+        "/smart-vote/insert-votes",
         { ...votersData, election_type: dept }
       );
 
@@ -817,7 +819,7 @@ export default function SmartvoteElection() {
                           <figure className="px-4 pt-4">
                             {card.image && card.image.trim() !== '' ? (
                               <img
-                                src={card.image.startsWith('http://') || card.image.startsWith('https://') ? card.image : `http://localhost:3004${card.image.startsWith('/') ? card.image : '/' + card.image}`}
+                                src={card.image.startsWith('http://') || card.image.startsWith('https://') ? card.image : `${BASE_URL}${card.image.startsWith('/') ? card.image : '/' + card.image}`}
                                 alt={`${card.firstname} ${card.lastname}`}
                                 className="w-full h-48 object-cover rounded-lg"
                                 onError={(e) => {
@@ -893,7 +895,7 @@ export default function SmartvoteElection() {
                       <div className="mb-4 flex justify-center">
                         {activeCard.image ? (
                           <img
-                            src={activeCard.image.startsWith('http') ? activeCard.image : `http://localhost:3004${activeCard.image}`}
+                            src={activeCard.image.startsWith('http') ? activeCard.image : `${BASE_URL}${activeCard.image}`}
                             alt={`${activeCard.firstname} ${activeCard.lastname}`}
                             className="w-48 h-48 object-cover rounded-lg"
                             onError={(e) => {

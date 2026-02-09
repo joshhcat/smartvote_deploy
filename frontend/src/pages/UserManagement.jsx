@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaCheckCircle, FaEye, FaPlus, FaEyeSlash, FaKey } from "react-icons/fa";
-import axios from "axios";
+import api from "../api";
 import Loader from "../components/Loader";
 import { FaCircleXmark, FaPencil, FaTrash } from "react-icons/fa6";
 
@@ -62,8 +62,8 @@ export default function UserManagement() {
   const [admins, setAdmins] = useState([]);
   const geAllAdmin = async (e) => {
     try {
-      const response = await axios.get(
-        "http://localhost:3004/smart-vote/get-admins"
+      const response = await api.get(
+        "/smart-vote/get-admins"
       );
 
       if (response.data.success === true) {
@@ -121,8 +121,8 @@ export default function UserManagement() {
     }
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/${admin_url}`,
+      const response = await api.post(
+        `/smart-vote/${admin_url}`,
         { ...adminData, sendEmail }
       );
       if (response.data.success === true) {
@@ -177,8 +177,8 @@ export default function UserManagement() {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/delete-admin/${selectedAdmin.admin_id}`
+      const response = await api.post(
+        `/smart-vote/delete-admin/${selectedAdmin.admin_id}`
       );
       if (response.data.success === true) {
         setTimeout(() => {

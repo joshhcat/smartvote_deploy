@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaMessage, FaRegCircleCheck, FaRegCircleXmark } from "react-icons/fa6";
 import Navbar from "./Navbar";
-import axios from "axios";
+import api from "../api";
 import getLocalISODate from "../utils/libraries";
 
 const initialUsers = [
@@ -77,8 +77,8 @@ export default function CandidacyHistory() {
   const [historyData, setHistoryData] = useState([]);
   const getApplicationHistory = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/find-candidate/${loggedUser?.student_id}`
+      const response = await api.post(
+        `/smart-vote/find-candidate/${loggedUser?.student_id}`
       );
       if (response.data.data.length !== 0) {
         setHistoryData(response.data.data);

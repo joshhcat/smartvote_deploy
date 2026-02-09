@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
-import axios from "axios";
+import api from "../api";
 import { FaExclamationTriangle, FaLock } from "react-icons/fa";
 
 const OpenFiling = ({ dept, setCandidacyOpened, setShowCandidacyForm }) => {
@@ -42,8 +42,8 @@ const OpenFiling = ({ dept, setCandidacyOpened, setShowCandidacyForm }) => {
   //* Get Candidacy Schedule
   const getCandidacySchedule = async (e) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-candidacy-schedule/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-candidacy-schedule/${dept}`
       );
 
       if (response.data.success === true && response.data.data?.[0]) {
@@ -103,8 +103,8 @@ const OpenFiling = ({ dept, setCandidacyOpened, setShowCandidacyForm }) => {
         close_date: formatDateForMySQL(formData.close_date),
       };
       
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-candidacy",
+      const response = await api.post(
+        "/smart-vote/update-candidacy",
         dataToSend
       );
       if (response.data.success === true) {

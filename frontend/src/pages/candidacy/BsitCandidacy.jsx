@@ -15,7 +15,7 @@ import {
 import CountDown from "../../components/CountDown";
 import OpenFiling from "../../components/OpenFiling";
 import { FaCircleXmark, FaMessage, FaRegCircleXmark } from "react-icons/fa6";
-import axios from "axios";
+import api from "../../api";
 import Loader from "../../components/Loader";
 import { sendMail } from "../../utils/mailer";
 
@@ -55,8 +55,8 @@ export const BsitCandidacy = () => {
   //* Get Candidates
   const getCandidate = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-candidates/${dept}`
+      const response = await api.post(
+        `/smart-vote/get-candidates/${dept}`
       );
 
       if (response.data.success === true) {
@@ -97,8 +97,8 @@ export const BsitCandidacy = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-candidacy",
+      const response = await api.post(
+        "/smart-vote/update-candidacy",
         {
           candidacy_type: dept,
           close_date: formattedDate,
@@ -278,8 +278,8 @@ export const BsitCandidacy = () => {
     document.getElementById("my_modal_4").close();
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3004/smart-vote/update-candidate",
+      const response = await api.post(
+        "/smart-vote/update-candidate",
         {
           student_id: selectedCandidate.student_id,
           status: status,

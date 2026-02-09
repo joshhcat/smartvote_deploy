@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaSearch, FaEnvelope, FaHistory } from "react-icons/fa";
-import axios from "axios";
+import api from "../api";
 
 export default function VotingHistory() {
   const [electionType, setElectionType] = useState("SSG");
@@ -37,8 +37,8 @@ export default function VotingHistory() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post(
-        `http://localhost:3004/smart-vote/get-voting-history/${electionType}`
+      const response = await api.post(
+        `/smart-vote/get-voting-history/${electionType}`
       );
       if (response.data.success) {
         setVotingData(response.data.data);
