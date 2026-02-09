@@ -1,28 +1,3 @@
-
-// import { ConfigService } from '@nestjs/config';
-// import { DataSourceOptions } from 'typeorm';
-
-// export const typeOrmConfigFactory = (
-//   configService: ConfigService,
-// ): DataSourceOptions => ({
-//   type: 'mysql',
-//   host: configService.get<string>('DATABASE_HOST'),
-//   port: configService.get<number>('DATABASE_PORT'),
-//   username: configService.get<string>('DATABASE_USER'),
-//   password: configService.get<string>('DATABASE_PASSWORD'),
-//   database: configService.get<string>('DATABASE_NAME'),
-//   synchronize: false, // Caution: Only use synchronize in development environments
-//   logging: false,
-//   // Other configuration options...
-//   extra: {
-//     connectionLimit: 30, // Optional: Limit the number of connections in the pool
-//     connectTimeout: 30000, // Increase connection timeout (in milliseconds)
-//     // idleTimeoutMillis: 60000,
-//     enableKeepAlive: true,
-//     keepAliveInitialDelay: 30000,
-//   },
-// });
-// export default typeOrmConfigFactory;
 import { ConfigService } from '@nestjs/config';
 import { DataSourceOptions } from 'typeorm';
 
@@ -30,23 +5,22 @@ export const typeOrmConfigFactory = (
   configService: ConfigService,
 ): DataSourceOptions => ({
   type: 'mysql',
-
   host: configService.get<string>('DATABASE_HOST'),
-
-  // ✅ FIX: convert port to number
-  port: Number(configService.get<string>('DATABASE_PORT')),
-
+  // ✅ FIX: Ensure fallback to Aiven default port if env is missing
+  port: Number(configService.get<string>('DATABASE_PORT')) || 18674,
   username: configService.get<string>('DATABASE_USER'),
   password: configService.get<string>('DATABASE_PASSWORD'),
   database: configService.get<string>('DATABASE_NAME'),
 
-  // ✅ IMPORTANT for NestJS production
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  // ✅ FIX: Updated path for production
+  // When NestJS builds, it moves everything to a 'dist' folder. 
+  // This path ensures it finds entities in both dev (.ts) and prod (.js).
+  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
 
-  synchronize: false,
-  logging: false,
+  synchronize: false, // Keep false for production safety
+  logging: configService.get<string>('NODE_ENV') === 'development',
 
-  // ✅ REQUIRED for cloud MySQL
+  // ✅ REQUIRED for Aiven Cloud MySQL
   ssl: {
     rejectUnauthorized: false,
   },
@@ -54,6 +28,8 @@ export const typeOrmConfigFactory = (
   extra: {
     connectionLimit: 10,
     connectTimeout: 30000,
+    // ✅ FIX: Some MySQL drivers need this for Aiven/DigitalOcean
+    waitForConnections: true,
   },
 });
 
