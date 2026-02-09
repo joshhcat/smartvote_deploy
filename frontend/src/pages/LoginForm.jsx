@@ -231,7 +231,7 @@ export default function LoginForm() {
   // };
 
   return (
-      <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800">
+      <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-emerald-600 to-gray-700">
       {/* Centered Loader with disabled backdrop click */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black opacity-75">
